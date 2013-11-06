@@ -168,6 +168,15 @@ describe Koala::HTTPService do
         key.should == args.find{|key_val_arr| key_val_arr.last == val}.first.to_s
       end
     end
+
+    it "should handle Date / Time like a string" do
+      args = { since: Date.new(2001,2,3), til: Time.new }
+      result = Koala::HTTPService.encode_params(args)
+      result.split('&').each do |key_val|
+        key, val = key_val.split('=')
+        key.should == args.find{|key_val_arr| key_val_arr.last.to_date.to_s == val }.first.to_s
+      end
+    end
   end
 
   describe ".make_request" do
